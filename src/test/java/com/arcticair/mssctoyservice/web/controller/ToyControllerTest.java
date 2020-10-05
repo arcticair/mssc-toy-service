@@ -48,7 +48,6 @@ class ToyControllerTest {
 
     }
 
-    @Test
     ToyDTO getValidToyDTO() {
         return ToyDTO.builder()
                 .name("Arara")
