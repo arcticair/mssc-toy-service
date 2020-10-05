@@ -1,6 +1,7 @@
 package com.arcticair.mssctoyservice.web.controller;
 
 import com.arcticair.mssctoyservice.model.ToyDTO;
+import com.arcticair.mssctoyservice.model.ToyStyleEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +33,7 @@ class ToyControllerTest {
 
     @Test
     void saveToy() throws Exception {
-        ToyDTO toyDTO = ToyDTO.builder().build();
+        ToyDTO toyDTO = getValidToyDTO();
         String jsonRepr = objectMapper.writeValueAsString(toyDTO);
 
         mockMvc.perform(post("/api/v1/toys/").contentType(MediaType.APPLICATION_JSON).content(jsonRepr)).andExpect(status().isCreated());
@@ -39,10 +41,20 @@ class ToyControllerTest {
 
     @Test
     void updateToy()  throws Exception {
-        ToyDTO toyDTO = ToyDTO.builder().build();
+        ToyDTO toyDTO = getValidToyDTO();
         String jsonRepr = objectMapper.writeValueAsString(toyDTO);
 
         mockMvc.perform(put("/api/v1/toys/"+ UUID.randomUUID().toString()).contentType(MediaType.APPLICATION_JSON).content(jsonRepr)).andExpect(status().isNoContent());
 
+    }
+
+    @Test
+    ToyDTO getValidToyDTO() {
+        return ToyDTO.builder()
+                .name("Arara")
+                .style(ToyStyleEnum.BABY)
+                .price(new BigDecimal("11.11"))
+                .upc(222L)
+                .build();
     }
 }
