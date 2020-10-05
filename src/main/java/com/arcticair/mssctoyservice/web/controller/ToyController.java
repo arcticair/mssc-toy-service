@@ -4,8 +4,10 @@ import com.arcticair.mssctoyservice.model.ToyDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -19,7 +21,7 @@ public class ToyController {
     }
 
     @PostMapping
-    public ResponseEntity saveToy(@RequestBody ToyDTO toy) {
+    public ResponseEntity saveToy(@RequestBody @Validated ToyDTO toy) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Location", "/api/v1/toys/" + UUID.randomUUID());
@@ -28,7 +30,7 @@ public class ToyController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity updateToy(@PathVariable("id") UUID id, @RequestBody ToyDTO toy) {
+    public ResponseEntity updateToy(@PathVariable("id") UUID id, @RequestBody @Validated ToyDTO toy) {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
