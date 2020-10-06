@@ -11,7 +11,13 @@ import java.math.BigDecimal;
 @Component
 public class ToyLoader implements CommandLineRunner {
 
-private final ToyRepository toyRepository;
+    public static final String upc1 = "0000011111";
+    public static final String upc2 = "0000011141";
+    public static final String upc3 = "0000016111";
+
+
+
+    private final ToyRepository toyRepository;
 
     public ToyLoader(ToyRepository toyRepository) {
         this.toyRepository = toyRepository;
@@ -29,7 +35,7 @@ private final ToyRepository toyRepository;
                     .name("bottle")
                     .style("baby")
                     .minOnHand(1)
-                    .upc(3452345345L)
+                    .upc(upc1)
                     .price(new BigDecimal("33.33"))
                     .build()
                     );
@@ -37,8 +43,16 @@ private final ToyRepository toyRepository;
                     .name("lego")
                     .style("medium")
                     .minOnHand(1)
-                    .upc(34523345L)
+                    .upc(upc2)
                     .price(new BigDecimal("323.55"))
+                    .build()
+            );
+            toyRepository.save(Toy.builder()
+                    .name("rty")
+                    .style("medium")
+                    .minOnHand(1)
+                    .upc(upc3)
+                    .price(new BigDecimal("3.55"))
                     .build()
             );
         }

@@ -1,21 +1,34 @@
 package com.arcticair.mssctoyservice.web.controller;
 
+import com.arcticair.mssctoyservice.domain.Toy;
 import com.arcticair.mssctoyservice.model.ToyDTO;
 import com.arcticair.mssctoyservice.model.ToyStyleEnum;
+import com.arcticair.mssctoyservice.repositories.ToyRepository;
+import com.arcticair.mssctoyservice.services.ToyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -24,7 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "tututu", uriPort = 80)
-@WebMvcTest(ToyController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class ToyControllerTest {
 
     @Autowired
@@ -33,8 +47,24 @@ class ToyControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Mock
+    ToyRepository repository;
+
+    @MockBean
+    ToyService service;
+
+    @BeforeEach
+    void setUp() {
+        //given(repository.findById(any(UUID.class))).willReturn(getValidToy());
+           given(service.getToyById(any(UUID.class))).willReturn(getValidToyDTO());
+           given(service.updateToy(any(), any())).willReturn(getValidToyDTO());
+
+    }
+
     @Test
     void getToyDTO() throws Exception {
+       // given(service.getToyById(any(UUID.class))).willReturn(getValidToyDTO());
+
         mockMvc.perform(get("/api/v1/toys/{toyId}", UUID.randomUUID().toString())
                 .param("iis", "yes")
                 .accept(MediaType.APPLICATION_JSON))
@@ -88,6 +118,8 @@ class ToyControllerTest {
 
     @Test
     void updateToy() throws Exception {
+       // given(service.updateToy(any(), any())).willReturn(getValidToyDTO());
+
         ToyDTO toyDTO = getValidToyDTO();
         String jsonRepr = objectMapper.writeValueAsString(toyDTO);
 
@@ -100,8 +132,12 @@ class ToyControllerTest {
                 .name("Arara")
                 .style(ToyStyleEnum.BABY)
                 .price(new BigDecimal("11.11"))
-                .upc(222L)
+                .upc("0000077777")
                 .build();
+    }
+
+    Toy getValidToy() {
+       return Toy.builder().name("ddd").style("rvrv").upc("ooo").build();
     }
 
 

@@ -32,8 +32,7 @@ public class ToyDTO {
     @NotNull
     private ToyStyleEnum style;
     @NotNull
-    @Positive
-    private Long upc;
+    private String upc;
     @NotNull
     @Positive
     @JsonFormat(shape = JsonFormat.Shape.STRING)
