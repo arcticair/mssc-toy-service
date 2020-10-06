@@ -1,9 +1,11 @@
 package com.arcticair.mssctoyservice.web.mapper;
 
+import org.springframework.stereotype.Controller;
+
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-
+@Controller
 public class DateMapper {
     public OffsetDateTime asOffset(Timestamp timestamp){
         if (timestamp != null){
